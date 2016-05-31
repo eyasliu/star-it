@@ -2,16 +2,18 @@ import gulp from 'gulp';
 import eslint from 'gulp-eslint';
 import nodemon from 'nodemon';
 import webpack from 'webpack';
-import WebpackServer from 'webpack-dev-server'
+import WebpackServer from 'webpack-dev-server';
+import run from 'run-sequence';
 
 // config
 import env from './config/env';
 import clientDev from './config/client.dev';
 import clientPro from './config/client.pro';
+import serverConfig from './config/server';
 
 
 // server dev
-gulp.task('dev:server', () => {
+gulp.task('dev:server', ['watch:server'], () => {
   nodemon({
     execMap: {
       js: 'node'
@@ -26,7 +28,7 @@ gulp.task('dev:server', () => {
 
 // watch server
 gulp.task('watch:server', () => {
-  webpack(webpackServerConfig).watch(100, (err, stats) => {
+  webpack(serverConfig).watch(100, (err, stats) => {
     console.log(stats.toString({
       chunks: false,
       colors: true,
