@@ -1,0 +1,43 @@
+{
+  "name": "star-it",
+  "version": "0.0.0",
+  "description": "an star tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test karma start --single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eyasliu/star-it.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "star"
+  ],
+  "author": "Eyas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eyasliu/star-it/issues"
+  },
+  "homepage": "https://github.com/eyasliu/star-it#readme",
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.9.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "nodemon": "^1.9.2",
+    "run-sequence": "^1.2.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "koa": "^1.2.0",
+    "koa-compose": "^2.4.0",
+    "koa-static": "^2.0.0"
+  }
+}
