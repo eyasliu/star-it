@@ -11,6 +11,8 @@ import clientDev from './config/client.dev';
 import clientPro from './config/client.pro';
 import serverConfig from './config/server';
 
+// dev
+gulp.task('dev', ['dev:client', 'dev:server'])
 
 // server dev
 gulp.task('dev:server', ['watch:server'], () => {
