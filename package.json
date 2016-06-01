@@ -4,7 +4,14 @@
   "description": "an star tool",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test karma start --single-run"
+    "test": "cross-env NODE_ENV=test karma start --single-run",
+    "test:watch": "cross-env NODE_ENV=test karma start",
+    "dev": "cross-env NODE_ENV=development gulp dev",
+    "dev:server": "cross-env NODE_ENV=development gulp dev:server",
+    "dev:client": "cross-env NODE_ENV=development gulp dev:client",
+    "build": "cross-env NODE_ENV=production gulp build",
+    "build:server": "cross-env NODE_ENV=production gulp build:server",
+    "build:client": "cross-env NODE_ENV=production gulp build:client",
   },
   "repository": {
     "type": "git",
@@ -39,6 +46,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "cross-env": "^1.0.8",
     "koa": "^1.2.0",
     "koa-compose": "^2.4.0",
     "koa-static": "^2.0.0"
