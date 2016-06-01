@@ -12,7 +12,8 @@
     "build": "cross-env NODE_ENV=production gulp build",
     "build:server": "cross-env NODE_ENV=production gulp build:server",
     "build:client": "cross-env NODE_ENV=production gulp build:client",
-    "lint": "gulp lint"
+    "lint": "gulp lint",
+    "star": "cross-env NODE_ENV=production bash run"
   },
   "repository": {
     "type": "git",
