@@ -3,6 +3,8 @@ import path from "path";
 import fs from "fs";
 // import config from './config';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(x => ['.bin'].indexOf(x) === -1)
@@ -49,13 +51,11 @@ const webpackConfig = {
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"'
-    }),
-    new webpack.BannerPlugin('require("source-map-support").install();',
-      {raw: true, entryOnly: false})
+    })
   ]
 };
 
-if (process.env.NODE_ENV == 'production') {
+if (!isDev) {
   webpackConfig.devtool = false;
   webpackConfig.plugins = [
     ...webpackConfig.plugins,
@@ -66,6 +66,11 @@ if (process.env.NODE_ENV == 'production') {
       comments: false
     })
   ]
+} else {
+  webpackConfig.plugins.push(
+    new webpack.BannerPlugin('require("source-map-support").install();',
+      {raw: true, entryOnly: false}
+  ))
 }
 
 

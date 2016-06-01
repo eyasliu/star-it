@@ -15,7 +15,7 @@ export default {
     publicPath: '/assets/'
   },
   module: {
-    noParse:[],
+    noParse: [],
     loaders: [
       {
         test: /\.(js|jsx)$/,
@@ -50,7 +50,7 @@ export default {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"'+process.env.NODE_ENV+'"'
+      'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"'
     })
   ]
 };

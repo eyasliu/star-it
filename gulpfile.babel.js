@@ -4,12 +4,19 @@ import nodemon from 'nodemon';
 import webpack from 'webpack';
 import WebpackServer from 'webpack-dev-server';
 import run from 'run-sequence';
+import {exec} from 'child_process';
 
 // config
 import env from './config/env';
 import clientDev from './config/client.dev';
 import clientPro from './config/client.pro';
 import serverConfig from './config/server';
+
+const webpackCompiler = webpackConfig => new Promise((resolve, reject) => {
+  webpack(webpackConfig).run((err, stats) => {
+    err ? reject(err) : resolve(stats)
+  })
+})
 
 // dev
 gulp.task('dev', ['dev:client', 'dev:server'])
@@ -30,24 +37,26 @@ gulp.task('dev:server', ['watch:server'], () => {
 
 // watch server
 gulp.task('watch:server', () => {
-  webpack(serverConfig).watch(100, (err, stats) => {
-    console.log(stats.toString({
-      chunks: false,
-      colors: true,
-    }));
-    run('lint');
-    !err && nodemon.restart();
-  })
+  webpackCompiler(serverConfig)
+    .then(stats => {
+      console.log(stats.toString({
+        chunks: false,
+        colors: true,
+      }));
+      run('lint');
+      nodemon.restart();
+    })
+    .catch(err => console.log(err));
 })
 
-
+// watch client
 gulp.task('dev:client', () => {
   const compiler = webpack(clientDev);
 
   new WebpackServer(compiler, {
     contentBase: './',
     publicPath: clientDev.output.publicPath,
-    hot: true,
+    hot: true,          
     quiet: false,
     historyApiFallback: true,
     noInfo: false,
@@ -62,13 +71,53 @@ gulp.task('dev:client', () => {
   })
 })
 
+// build client
+gulp.task('build:client', () => {
+  webpackCompiler(clientPro)
+    .then(stats => {
+      console.log('========================client build complete=========================')
+      console.log(stats.toString({
+        chunks: false,
+        colors: true,
+      }))
+    })
+    .catch(err => console.log(err))
+})
+
+// build client
+gulp.task('build:server', () => {
+  webpackCompiler(serverConfig)
+    .then(stats => {
+      console.log('========================server build complete=========================')
+      console.log(stats.toString({
+        chunks: false,
+        colors: true,
+      }))
+    })
+    .catch(err => console.log(err))
+})
+
+// build
+gulp.task('build', ['clear'], () => {
+  run('build:server')
+  run('build:client')
+})
+
 // lint
 gulp.task('lint', () => {
   gulp
     .src([
       './*.js',
-      'app/**/*.js'
+      'app/**/*.js',
+      'config/*.js'
     ])
     .pipe(eslint())
     .pipe(eslint.formatEach())
+})
+
+// clear
+gulp.task('clear', () => {
+  exec('rm -rf build', () => {
+    console.log('clear success')
+  })
 })
