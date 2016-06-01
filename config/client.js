@@ -5,7 +5,8 @@ export default {
   resolve: {
     extensions: ['', '.js', '.jsx', '.css', '.scss'],
     alias: {
-      
+      utils: path.join(__dirname, '../app/client/utils'),
+      fw: path.join(__dirname, '../app/client/modules/framework')
     }
   },
   output: {
