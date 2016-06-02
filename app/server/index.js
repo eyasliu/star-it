@@ -4,7 +4,7 @@ import env from 'root/config/env';
 
 const app = koa();
 
-app.use(function *(){
+app.use(function *test(){
   this.body = 'hello';
 })
 

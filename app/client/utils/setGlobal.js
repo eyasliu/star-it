@@ -1,6 +1,6 @@
 export default (vars = {}) => {
   const glb = global || window;
-  for (let v in vars) {
+  for (const v in vars) {
     if(v){
       if(glb[v]) {
         console.error('window[' + v + '] is already set');
