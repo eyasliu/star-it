@@ -12,11 +12,16 @@ import clientDev from './config/client.dev';
 import clientPro from './config/client.pro';
 import serverConfig from './config/server';
 
-const webpackCompiler = webpackConfig => new Promise((resolve, reject) => {
-  webpack(webpackConfig).run((err, stats) => {
-    err ? reject(err) : resolve(stats)
-  })
-})
+const log = callback => {
+  return (err, stats) => {
+    console.log('========================build complete=========================')
+    console.log(stats.toString({
+      chunks: false,
+      colors: true,
+    }));
+    callback && callback(err, stats)
+  }
+}
 
 // dev
 gulp.task('dev', ['dev:client', 'dev:server'])
@@ -37,21 +42,19 @@ gulp.task('dev:server', ['watch:server'], () => {
 
 // watch server
 gulp.task('watch:server', () => {
-  webpackCompiler(serverConfig)
-    .then(stats => {
-      console.log(stats.toString({
-        chunks: false,
-        colors: true,
-      }));
-      run('lint');
-      nodemon.restart();
-    })
-    .catch(err => console.log(err));
+  webpack(serverConfig).watch(100, log((err, stats) => {
+    run('lint');
+    nodemon.restart();
+  }));
 })
 
 // watch client
 gulp.task('dev:client', () => {
   const compiler = webpack(clientDev);
+
+  compiler.plugin('done', (stats) => {
+    run('lint');
+  });
 
   new WebpackServer(compiler, {
     contentBase: './',
@@ -73,28 +76,12 @@ gulp.task('dev:client', () => {
 
 // build client
 gulp.task('build:client', () => {
-  webpackCompiler(clientPro)
-    .then(stats => {
-      console.log('========================client build complete=========================')
-      console.log(stats.toString({
-        chunks: false,
-        colors: true,
-      }))
-    })
-    .catch(err => console.log(err))
+  webpack(clientPro).run(log())
 })
 
 // build client
 gulp.task('build:server', () => {
-  webpackCompiler(serverConfig)
-    .then(stats => {
-      console.log('========================server build complete=========================')
-      console.log(stats.toString({
-        chunks: false,
-        colors: true,
-      }))
-    })
-    .catch(err => console.log(err))
+  webpack(serverConfig).run(log())
 })
 
 // build
